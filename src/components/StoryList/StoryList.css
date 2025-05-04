@@ -1,5 +1,6 @@
 .story-list-wrapper {
   padding: 0;
+  transition: opacity 0.3s ease;
 }
 
 .app-name {
@@ -19,17 +20,19 @@
   white-space: nowrap;
   padding: 10px 0;
   gap: 10px;
-  position: sticky;
-  /* top: 56px; */
+  position: relative;
   z-index: 99;
   -webkit-overflow-scrolling: touch;
   border-bottom: 1px solid #dbdbdb;
 }
 
-.story-list::-webkit-scrollbar {
+.story-list-wrapper.story-viewer-open .story-list {
   display: none;
 }
 
+.story-list-wrapper.story-viewer-open {
+  opacity: 0.4; 
+}
 
 .story-list::-webkit-scrollbar {
   display: none;
