@@ -13,10 +13,16 @@ interface StoryViewerProps {
   closeViewer: () => void;
 }
 
-const StoryViewer: React.FC<StoryViewerProps> = ({ stories, currentIndex, closeViewer }) => {
+const StoryViewer: React.FC<StoryViewerProps> = ({
+  stories,
+  currentIndex,
+  closeViewer,
+}) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(currentIndex);
   const [startY, setStartY] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [transitionDirection, setTransitionDirection] = useState<'next' | 'prev'>('next');
+  const [hasTransitioned, setHasTransitioned] = useState(false); // NEW
 
   const currentStory = stories[currentStoryIndex];
 
@@ -27,30 +33,36 @@ const StoryViewer: React.FC<StoryViewerProps> = ({ stories, currentIndex, closeV
   const handleTouchMove = (e: React.TouchEvent) => {
     const touchEndY = e.touches[0].clientY;
     if (startY - touchEndY > 50) {
-        // swipe up, do nothing
+      // swipe up
     } else if (touchEndY - startY > 50) {
       closeViewer();
     }
   };
 
   const handleImageLoad = () => {
-    setLoading(false);  
+    setLoading(false);
   };
 
   const goToNextStory = () => {
+    setTransitionDirection('next');
     setCurrentStoryIndex((prevIndex) => (prevIndex + 1) % stories.length);
+    setLoading(true);
+    setHasTransitioned(true); // Allow animation from second render
   };
 
   const goToPreviousStory = () => {
+    setTransitionDirection('prev');
     setCurrentStoryIndex(
       (prevIndex) => (prevIndex - 1 + stories.length) % stories.length
     );
+    setLoading(true);
+    setHasTransitioned(true); // Allow animation from second render
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       goToNextStory();
-    }, 5000); 
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [currentStoryIndex]);
@@ -62,28 +74,35 @@ const StoryViewer: React.FC<StoryViewerProps> = ({ stories, currentIndex, closeV
       onTouchMove={handleTouchMove}
     >
       <div className="story-viewer-container">
-        <div className="story-left" onClick={goToPreviousStory}/>
+        <div className="story-left" onClick={goToPreviousStory} />
 
-        {loading && (
-          <div className="loader">
-            <span>Loading...</span>
-          </div>
-        )}
+        <div className="story-slider">
+          {loading && (
+            <div className="loader">
+              <span>Loading...</span>
+            </div>
+          )}
 
-      <div
-          key={currentStory.id} 
-          className={`story-image-container ${loading ? 'loading' : 'loaded'}`}
-        >
-          <div className={`story-image ${loading ? 'loading' : 'loaded'}`}>
-            <img 
-              src={currentStory.image} 
-              alt={currentStory.username} 
+          <div
+            key={currentStory.id}
+            className={`story-image-container ${
+              hasTransitioned
+                ? transitionDirection === 'next'
+                  ? 'slide-right'
+                  : 'slide-left'
+                : 'no-animation'
+            }`}
+          >
+            <img
+              className="story-image"
+              src={currentStory.image}
+              alt={currentStory.username}
               onLoad={handleImageLoad}
             />
           </div>
         </div>
 
-        <div className="story-right" onClick={goToNextStory}/>
+        <div className="story-right" onClick={goToNextStory} />
       </div>
     </div>
   );
