@@ -47,7 +47,7 @@ const StoryViewer: React.FC<StoryViewerProps> = ({
     setTransitionDirection('next');
     setCurrentStoryIndex((prevIndex) => (prevIndex + 1) % stories.length);
     setLoading(true);
-    setHasTransitioned(true); // Allow animation from second render
+    setHasTransitioned(true);
   };
 
   const goToPreviousStory = () => {
@@ -56,7 +56,7 @@ const StoryViewer: React.FC<StoryViewerProps> = ({
       (prevIndex) => (prevIndex - 1 + stories.length) % stories.length
     );
     setLoading(true);
-    setHasTransitioned(true); // Allow animation from second render
+    setHasTransitioned(true);
   };
 
   useEffect(() => {
