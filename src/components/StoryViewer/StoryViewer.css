@@ -8,17 +8,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 999;
 }
 
 .story-viewer-container {
   position: relative;
-  width: 90%;
+  width: 100vw;
   max-width: 480px;
-  height: 80%;
-  background-color: #fff;
-  border-radius: 20px;
+  height: 100vh;
+  background-color: #000;
+  border-radius: 0;
   overflow: hidden;
+}
+
+.story-image{
+  width: 100%;
+  height: 100%;
 }
 
 .story-image img {
@@ -36,6 +41,7 @@
   height: 100%;
   cursor: pointer;
   z-index: 2;
+  outline: none;
 }
 
 .story-left {
@@ -44,4 +50,9 @@
 
 .story-right {
   right: 0;
+}
+
+.story-left:focus,
+.story-right:focus {
+  outline: none;
 }
