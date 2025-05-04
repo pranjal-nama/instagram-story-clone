@@ -1,0 +1,92 @@
+.story-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.story-viewer-container {
+  position: relative;
+  width: 100vw;
+  max-width: 480px;
+  height: 100vh;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.story-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.story-image-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.story-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide-right {
+  animation-name: slideInFromRight;
+}
+
+.slide-left {
+  animation-name: slideInFromLeft;
+}
+
+.no-animation {
+  animation: none !important;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.story-left,
+.story-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+  user-select: none;
+}
+
+.story-left {
+  left: 0;
+}
+
+.story-right {
+  right: 0;
+}
