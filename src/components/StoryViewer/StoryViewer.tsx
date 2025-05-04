@@ -16,6 +16,7 @@ interface StoryViewerProps {
 const StoryViewer: React.FC<StoryViewerProps> = ({ stories, currentIndex, closeViewer }) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(currentIndex);
   const [startY, setStartY] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const currentStory = stories[currentStoryIndex];
 
@@ -30,6 +31,10 @@ const StoryViewer: React.FC<StoryViewerProps> = ({ stories, currentIndex, closeV
     } else if (touchEndY - startY > 50) {
       closeViewer();
     }
+  };
+
+  const handleImageLoad = () => {
+    setLoading(false);  
   };
 
   const goToNextStory = () => {
@@ -57,17 +62,28 @@ const StoryViewer: React.FC<StoryViewerProps> = ({ stories, currentIndex, closeV
       onTouchMove={handleTouchMove}
     >
       <div className="story-viewer-container">
-        <div
-          className="story-left"
-          onClick={goToPreviousStory}
-        />
-        <div className="story-image">
-          <img src={currentStory.image} alt={currentStory.username} />
+        <div className="story-left" onClick={goToPreviousStory}/>
+
+        {loading && (
+          <div className="loader">
+            <span>Loading...</span>
+          </div>
+        )}
+
+      <div
+          key={currentStory.id} 
+          className={`story-image-container ${loading ? 'loading' : 'loaded'}`}
+        >
+          <div className={`story-image ${loading ? 'loading' : 'loaded'}`}>
+            <img 
+              src={currentStory.image} 
+              alt={currentStory.username} 
+              onLoad={handleImageLoad}
+            />
+          </div>
         </div>
-        <div
-          className="story-right"
-          onClick={goToNextStory}
-        />
+
+        <div className="story-right" onClick={goToNextStory}/>
       </div>
     </div>
   );
